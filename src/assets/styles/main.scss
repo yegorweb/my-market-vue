@@ -1,0 +1,108 @@
+@use "sass:math";
+@use "sass:list";
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap');
+@import './fonts.css'; 
+
+@mixin adaptive-value-h($property, $value, $min, $max) {
+  @if ($max == 0) {
+    @media screen and (min-width: $min) {
+      #{$property}: $value;
+    }
+  } @else {
+    @media screen and (min-width: $min) and (max-width: $max) {
+      #{$property}: $value;
+    }
+  }
+}
+
+body, html {
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden;
+  overflow-y: auto !important;
+}
+
+html {
+  margin-left: calc(100vw - 100%);
+}
+
+$font-family: 'Montserrat';
+$body-font-family: 'Montserrat';
+
+.v-application {
+  [class*='text-'] {
+    // color: #36405a;
+    font-family: $font-family !important;
+  }
+  font-family: $font-family !important;
+}
+
+[class*='text-'] {
+  // color: #36405a;
+  font-family: $font-family !important;
+}
+
+.text-body-2 {
+  font-family: $font-family !important;
+}
+
+* {
+  font-family: $font-family !important;
+}
+
+.montserrat {
+  font-family: $font-family !important;
+}
+
+.cursor-pointer {
+  cursor: pointer;
+}
+
+.font-weight-semibold {
+  font-weight: 600;
+}
+
+.font-author {
+  font-weight: 500;
+  font-size: 18px;
+}
+
+.error-message {
+  color: red;
+  font-weight: 8px;
+  text-align: start;
+}
+
+.lh-1 { 
+  line-height: 1;
+}
+
+.user-select-none {
+  user-select: none;
+}
+
+.entries-container {
+  width: 100%;
+  display: grid;
+  @include adaptive-value-h(grid-template-columns, 1fr, 0px, 599px);
+  @include adaptive-value-h(grid-template-columns, 1fr 1fr, 600px, 0);
+  gap: 24px;
+}
+
+.mt-header {
+  margin-top: 20px;
+}
+
+.cursor-pointer {
+  cursor: pointer;
+}
+
+.user-select-none {
+  user-select: none;
+}
+
+.global-box {
+background: #FFFFFF;
+border-radius: 12px;
+box-shadow: 0px 10px 40px 5px rgba(34, 60, 80, 0.08);
+}
