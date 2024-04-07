@@ -53,11 +53,11 @@ let images = ['https://www.belnovosti.by/sites/default/files/2023-04/kartoshka_2
             </v-col>
 
             <v-col class="d-flex flex-column align-start align-lg-end" cols="8" lg="4">
-              <v-btn class="bg-green w-100 text-body-1" variant="tonal">
+              <v-btn prepend-icon="mdi-phone" class="bg-green w-100 rounded-lg text-body-1" variant="tonal">
                 Позвонить
               </v-btn>
 
-              <v-btn class="mt-2 w-100 text-body-1" variant="outlined">
+              <v-btn prepend-icon="mdi-send" class="mt-2 w-100 rounded-lg text-body-1" variant="tonal">
                 Написать
               </v-btn>
             </v-col>
