@@ -2,6 +2,7 @@
 import { ref, Ref } from 'vue';
 import { useRouter } from 'vue-router';
 import BackButton from '../components/BackButton.vue';
+import Cropper from '../components/Cropper.vue';
 import { useAuth } from '../stores/auth';
 import { useField, useForm } from 'vee-validate'
 import { User } from '../types/user.interface';
@@ -104,9 +105,7 @@ const submit = handleSubmit(async values => {
             class="w-100"
           /> -->
   
-          <v-btn variant="tonal" class="w-100 text-body-1">
-            Загрузить фото
-          </v-btn>
+          <Cropper></Cropper>
   
           <div class="mt-4 w-100 d-flex">
             <v-btn class="text-body-1" variant="tonal" prepend-icon="mdi-plus">
