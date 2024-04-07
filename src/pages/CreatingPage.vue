@@ -7,17 +7,18 @@ import { useAuth } from '../stores/auth';
 import { useField, useForm } from 'vee-validate'
 import { User } from '../types/user.interface';
 import { storeToRefs } from 'pinia';
+import { CropResult } from "../types/cropresult.interface";
 
 let user = storeToRefs(useAuth()).user as Ref<User>
 let router = useRouter()
 
 let loading = ref(false)
-
 const { meta, handleSubmit, validate } = useForm({
   initialValues: {
     title: '',
     description: '',
     price: '',
+    images: <Array<File>>[],
     location: {
       name: '',
       geo_lat: null,
@@ -28,13 +29,13 @@ const { meta, handleSubmit, validate } = useForm({
     title(value: string) {
       if (value.trim().length < 4) return 'слишком короткий заголовок'
       if (value.length > 32) return 'слишком длинный заголовок'
-      
+
       return true
     },
     description(value: string) {
-      if (value.trim().length < 20) return 'слишком короткое описание' 
+      if (value.trim().length < 20) return 'слишком короткое описание'
       if (value.length > 150) return 'слишком длинное описание'
-      
+
       return true
     },
     price(value: string) {
@@ -47,18 +48,29 @@ let title = useField<string>('title')
 let description = useField<string>('description')
 let price = useField<string>('price')
 let location = useField<string>('location')
+let images = useField<Array<Blob | null>>('images')
+let previews = ref<Array<String>>([])
+
+
+function handleCrop(result: CropResult) {
+  console.log('sdfsdf');
+  images.value.value.push(result.file)
+  previews.value.push(result.base64)
+}
 
 const submit = handleSubmit(async values => {
   loading.value = true
+  console.log(values);
 
   // await EntryAPI.create(Object.assign(values, {
   //   type: variant.value,
   //   school: user.value.school._id,
   // }))
   // .then(() => router.push(`/user/${user.value._id}`))
-  
+
   loading.value = false
 })
+
 </script>
 
 <template>
@@ -67,36 +79,19 @@ const submit = handleSubmit(async values => {
 
     <v-row class="justify-center">
       <v-col cols="12" md="6" lg="4">
-        <v-form @submit.prevent="submit" class="global-box d-flex flex-column align-center w-100 h-100 pt-4 pr-6 pb-4 pl-6">
+        <v-form @submit.prevent="submit"
+          class="global-box d-flex flex-column align-center w-100 h-100 pt-4 pr-6 pb-4 pl-6">
           <div class="font-weight-bold" style="font-size: 20px;">Создать</div>
-  
-          <v-text-field 
-            v-model="title.value.value"
-            :error-messages="title.errorMessage.value"
-            placeholder="Заголовок"
-            variant="outlined"
-            density="compact"
-            class="mt-3 w-100"
-          />
-      
-          <v-textarea
-            v-model="description.value.value"
-            :error-messages="description.errorMessage.value"
-            variant="outlined"
-            placeholder="Описание"    
-            density="compact"
-            class="w-100"
-          />
-      
-          <v-text-field 
-            v-model="price.value.value"
-            :error-messages="price.errorMessage.value"
-            variant="outlined"
-            placeholder="Цена"
-            density="compact"
-            class="w-100"
-          />
-  
+
+          <v-text-field v-model="title.value.value" :error-messages="title.errorMessage.value" placeholder="Заголовок"
+            variant="outlined" density="compact" class="mt-3 w-100" />
+
+          <v-textarea v-model="description.value.value" :error-messages="description.errorMessage.value"
+            variant="outlined" placeholder="Описание" density="compact" class="w-100" />
+
+          <v-text-field v-model="price.value.value" :error-messages="price.errorMessage.value" variant="outlined"
+            placeholder="Цена" density="compact" class="w-100" />
+
           <!-- <v-text-field 
             v-model="form.location" 
             variant="outlined"
@@ -104,22 +99,18 @@ const submit = handleSubmit(async values => {
             density="compact"
             class="w-100"
           /> -->
-  
-          <Cropper></Cropper>
-  
+
+          <Cropper @update:result="handleCrop"></Cropper>
+          {{ previews }}
+
           <div class="mt-4 w-100 d-flex">
             <v-btn class="text-body-1" variant="tonal" prepend-icon="mdi-plus">
               Телефон
             </v-btn>
           </div>
-              
-          <v-btn 
-            class="ma-auto bg-green-lighten-1 mt-4"
-            variant="tonal"
-            type="submit"
-            :loading="loading"
-            :disabled="!meta.valid" 
-          >
+
+          <v-btn class="ma-auto bg-green-lighten-1 mt-4" variant="tonal" type="submit" :loading="loading"
+            :disabled="!meta.valid">
             Отправить
           </v-btn>
         </v-form>
@@ -128,6 +119,4 @@ const submit = handleSubmit(async values => {
   </v-container>
 </template>
 
-<style lang="scss">
-
-</style>
+<style lang="scss"></style>

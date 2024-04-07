@@ -1,21 +1,36 @@
 <script setup lang="ts">
 import { ref, reactive } from "vue"
 import VuePictureCropper, { cropper } from 'vue-picture-cropper'
+import { CropResult } from "../types/cropresult.interface";
+
+const emit = defineEmits({
+  finishCrop(payload: CropResult) {
+    if (payload.base64 == '' || payload.file == null) {
+      // тут можно вывести ошибку
+      return false
+    }
+    return true
+  }
+})
+
+// const emit = defineEmits<{
+//   (e: 'crop', value: object): { blob: Blob, base64: String }
+// }>()
 
 const uploadInput = ref<HTMLInputElement | null>(null)
 
 let pic = ref<string>('')
 let isShowDialog = ref<boolean>(false)
-let result = reactive({
-  dataURL: '',
-  blobURL: '',
+let result = reactive<CropResult>({
+  file: null,
+  base64: '',
 })
 
 function selectFile(e: Event) {
   // Reset last selection and results
   pic.value = ''
-  result.dataURL = ''
-  result.blobURL = ''
+  result.base64 = ''
+  result.file = null
 
   // Get selected files
   const { files } = e.target as HTMLInputElement
@@ -40,16 +55,19 @@ function selectFile(e: Event) {
 async function getResult() {
   if (!cropper) return
   const base64 = cropper.getDataURL()
-  const blob: Blob | null = await cropper.getBlob()
-  if (!blob) return
+  // const blob: Blob | null = await cropper.getBlob()
+  // if (!blob) return
 
-  // const file = await cropper.getFile({
-  //   fileName: locales.fileName,
-  // })
+  const file = await cropper.getFile({})
 
-  console.log({ base64, blob })
-  result.dataURL = base64
-  result.blobURL = URL.createObjectURL(blob)
+  result.base64 = base64
+  result.file = file
+}
+
+async function finishCrop() {
+  await getResult()
+
+  emit('finishCrop', result)
   isShowDialog.value = false
 }
 </script>
@@ -60,7 +78,7 @@ async function getResult() {
       Загрузить фото
       <input ref="uploadInput" type="file" accept="image/jpg, image/jpeg, image/png, image/gif" @change="selectFile" />
     </v-btn>
-    <v-dialog v-model="isShowDialog" max-width="700">
+    <v-dialog v-model="isShowDialog" max-width="800">
       <v-card class="px-3 pt-3">
         <VuePictureCropper :boxStyle="{
         width: '100%',
@@ -73,7 +91,7 @@ async function getResult() {
         aspectRatio: 1.3,
       }" />
         <v-card-actions class="d-flex justify-center">
-          <v-btn class="text-body-1" variant="tonal">Обрезать</v-btn>
+          <v-btn class="text-body-1" variant="tonal" @click="finishCrop">Обрезать</v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
