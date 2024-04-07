@@ -31,7 +31,7 @@ const { x, y } = useScroll(document)
         </template>
 
         <v-list variant="tonal" elevation="0" class="rounded-lg pa-0">
-          <v-list-item prepend-icon="mdi-home" to="/" :ripple="false">
+          <v-list-item prepend-icon="mdi-home" to="/" :exact="true" :ripple="false">
             Главная
           </v-list-item>
 
