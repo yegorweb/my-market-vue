@@ -3,15 +3,17 @@ import { storeToRefs } from 'pinia';
 import { useRouter } from 'vue-router';
 import { useDisplay } from 'vuetify/lib/framework.mjs';
 import { useAuth } from '../stores/auth';
+import { useScroll } from '@vueuse/core'
 
 let auth = useAuth()
 let { user } = storeToRefs(auth)
 
 let router = useRouter()
+const { x, y } = useScroll(document)
 </script>
 
 <template>
-  <div style="position: fixed; top: 0; left: 0; right: 0; height: 60px; z-index: 999;">
+  <div :style="`background: ${ y > 0 ? '#FFFFFF' : 'none'}; transition: all .15s; position: fixed; top: 0; left: 0; right: 0; height: 60px; z-index: 999;`">
     <v-container class="d-flex align-center justify-space-between user-select-none" style="height: 60px; position: relative;">
       <div @click="router.push('/')" class="d-flex align-center cursor-pointer">
           <img src="/logo.svg" />
