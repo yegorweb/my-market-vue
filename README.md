@@ -1,6 +1,4 @@
-# <p align="center">:mortar_board: **Мой Маркет**</p>
+# <p align="center">**Мой Маркет**</p>
 
 1. Скопировать .env файл из YouGile
-2. ```bash
-npm run dev
-```
+2. ```npm run dev```
