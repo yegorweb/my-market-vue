@@ -61,6 +61,7 @@ const submit = handleSubmit(async values => {
 </script>
 
 <template>
+  <div class="w-100">
   <v-container class="mt-1">
     <BackButton />
 
@@ -127,6 +128,7 @@ const submit = handleSubmit(async values => {
       </v-col>
     </v-row>
   </v-container>
+  </div>
 </template>
 
 <style lang="scss">

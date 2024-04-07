@@ -39,6 +39,7 @@ const login = handleSubmit(async values => {
 </script>
 
 <template>
+  <div class="w-100">
   <v-container class="align-start">
     <BackButton></BackButton>
 
@@ -85,4 +86,5 @@ const login = handleSubmit(async values => {
       </v-card>
     </v-col>
   </v-container>
+  </div>
 </template>

@@ -5,6 +5,7 @@ let images = ['https://www.belnovosti.by/sites/default/files/2023-04/kartoshka_2
 </script>
 
 <template>
+  <div class="w-100">
   <v-container>
     <BackButton />
 
@@ -65,6 +66,7 @@ let images = ['https://www.belnovosti.by/sites/default/files/2023-04/kartoshka_2
       </v-col>
     </v-row>
   </v-container>
+  </div>
 </template>
 
 <style lang="scss" scoped>

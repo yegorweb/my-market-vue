@@ -69,6 +69,7 @@ const submit = handleSubmit(async values => {
 </script>
 
 <template>
+  <div class="w-100">
   <v-container>
     <BackButton />
 
@@ -146,4 +147,5 @@ const submit = handleSubmit(async values => {
       </v-card>
     </v-col>
   </v-container>
+  </div>
 </template>

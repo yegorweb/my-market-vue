@@ -21,7 +21,11 @@ let { user } = storeToRefs(auth)
     <!-- Content -->
     <v-main style="padding-bottom: 80px; padding-top: 60px;">
       <Suspense>
-        <router-view :key="$route.path"></router-view>
+        <router-view v-slot="{ Component, route }">
+          <transition :name="route.meta.transition">
+            <component :is="Component" />
+          </transition>
+        </router-view>
       </Suspense>
     </v-main>
   </v-app>
