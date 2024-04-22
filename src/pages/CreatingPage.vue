@@ -4,6 +4,7 @@ import { useRouter } from 'vue-router';
 import BackButton from '../components/BackButton.vue';
 import Cropper from '../components/Cropper.vue';
 import { useAuth } from '../stores/auth';
+import { useProduct } from '../stores/product'
 import { useField, useForm } from 'vee-validate'
 import { User } from '../types/user.interface';
 import { storeToRefs } from 'pinia';
@@ -11,6 +12,7 @@ import { CropResult } from "../types/cropresult.interface";
 
 let user = storeToRefs(useAuth()).user as Ref<User>
 let router = useRouter()
+const productStore = useProduct()
 
 let loading = ref(false)
 const { meta, handleSubmit, validate } = useForm({
@@ -60,12 +62,7 @@ function handleCrop(result: CropResult) {
 const submit = handleSubmit(async values => {
   loading.value = true
   console.log(values);
-
-  // await EntryAPI.create(Object.assign(values, {
-  //   type: variant.value,
-  //   school: user.value.school._id,
-  // }))
-  // .then(() => router.push(`/user/${user.value._id}`))
+  await productStore.create(values)
 
   loading.value = false
 })
@@ -102,8 +99,8 @@ const submit = handleSubmit(async values => {
           <Cropper @finishCrop="handleCrop"></Cropper>
           <v-row class="d-flex justify-center">
             <v-col cols="auto">
-              <div v-for="p in previews"  class="preview">
-                <img :src="p" alt="preview">
+              <div v-for="p in previews" class="preview">
+                <img :src="p" alt="preview" />
               </div>
             </v-col>
           </v-row>
