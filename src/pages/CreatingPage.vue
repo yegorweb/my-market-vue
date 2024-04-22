@@ -22,7 +22,7 @@ const { meta, handleSubmit, validate } = useForm({
     location: {
       name: '',
       geo_lat: null,
-      geo_lot: null
+      geo_lon: null
     }
   },
   validationSchema: {
@@ -53,7 +53,6 @@ let previews = ref<Array<String>>([])
 
 
 function handleCrop(result: CropResult) {
-  console.log('sdfsdf');
   images.value.value.push(result.file)
   previews.value.push(result.base64)
 }
@@ -100,9 +99,14 @@ const submit = handleSubmit(async values => {
             class="w-100"
           /> -->
 
-          <Cropper @update:result="handleCrop"></Cropper>
-          {{ previews }}
-
+          <Cropper @finishCrop="handleCrop"></Cropper>
+          <v-row class="d-flex justify-center">
+            <v-col cols="auto">
+              <div v-for="p in previews"  class="preview">
+                <img :src="p" alt="preview">
+              </div>
+            </v-col>
+          </v-row>
           <div class="mt-4 w-100 d-flex">
             <v-btn class="text-body-1" variant="tonal" prepend-icon="mdi-plus">
               Телефон
@@ -119,4 +123,10 @@ const submit = handleSubmit(async values => {
   </v-container>
 </template>
 
-<style lang="scss"></style>
+<style lang="scss" scoped>
+.preview {
+  img {
+    height: 150px;
+  }
+}
+</style>
