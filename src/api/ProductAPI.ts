@@ -1,8 +1,13 @@
 import $api from '../plugins/axios'
 
 export default {
-    async create(product: any) {
+    create(product: any) {
         // Егор, ради тебя делаю не на /product, а на /product/create
-        return $api.post('/product/create')
+        return $api.post('/product/create', { product })
+    },
+    uploadImages(formData: any, productId: String) {
+        return $api.post(`/product/upload-images?_id=${productId}`, formData, {
+            headers: { 'Content-Type': 'multipart/form-data' },
+        })
     }
 }

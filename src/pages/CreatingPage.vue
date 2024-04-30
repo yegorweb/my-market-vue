@@ -61,9 +61,18 @@ function handleCrop(result: CropResult) {
 
 const submit = handleSubmit(async values => {
   loading.value = true
-  console.log(values);
-  await productStore.create(values)
-
+  const response = await productStore.create(values)
+  const productId = response?.data._id
+ 
+  if (productId) {
+    let formData = new FormData()
+    for(let i = 0; i < values.images.length; i++) {
+      formData.append(`${productId}_${i}`, values.images[i])
+    }
+    console.log(formData);
+    
+    await productStore.uploadImages(formData, productId)
+  }
   loading.value = false
 })
 
