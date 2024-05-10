@@ -16,7 +16,7 @@ const { x, y } = useScroll(document)
   <div :style="`background: ${ y > 0 ? '#FFFFFF' : 'none'}; position: fixed; top: 0; left: 0; right: 0; height: 60px; z-index: 999;`">
     <v-container class="d-flex align-center justify-space-between user-select-none" style="height: 60px; position: relative;">
       <div @click="router.push('/')" class="d-flex align-center cursor-pointer">
-          <img src="/logo.svg" />
+          <img src="/logo.svg" style="height: 40px;" />
   
           <div class="font-weight-bold" style="font-size: 18px; margin-left: 15px;">МойМаркет</div>
       </div>
