@@ -6,6 +6,7 @@ import { useRouter } from 'vue-router';
 import { useUser } from '../../stores/user';
 import { User } from '../../types/user.interface';
 import { storeToRefs } from 'pinia';
+import Product from '../../components/Product.vue';
 
 let router = useRouter()
 let auth = useAuth()
@@ -57,6 +58,12 @@ async function logout() {
           {{ user.name }}
         </div>
       </div>
+
+      <v-row class="mt-4">
+        <v-col v-for="item in 10" cols="6" sm="4" md="3">
+          <Product />
+        </v-col>
+      </v-row>
     </v-container>
   </div>
 </template>
