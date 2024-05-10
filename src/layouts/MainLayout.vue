@@ -22,7 +22,7 @@ let { user } = storeToRefs(auth)
     <v-main style="padding-bottom: 80px; padding-top: 60px;">
       <Suspense>
         <router-view v-slot="{ Component, route }">
-          <transition :name="route.meta.transition">
+          <transition :name="route.meta.transition as string">
             <component :is="Component" />
           </transition>
         </router-view>
