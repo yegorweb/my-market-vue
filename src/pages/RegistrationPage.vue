@@ -59,10 +59,9 @@ let loading = ref(false)
 const submit = handleSubmit(async values => {
   loading.value = true
   
-  await auth.registration(values)
-  .then(() => { 
-    if (user.value) router.push(`/user/${user.value._id}`)
-  })
+  let result = await auth.registration(values) 
+  if (result && user.value) 
+    router.push(`/user/${user.value._id}`)
 
   loading.value = false 
 })

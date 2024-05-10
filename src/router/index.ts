@@ -1,11 +1,14 @@
-import { createRouter, createWebHistory, RouteLocation, RouteRecordRaw } from 'vue-router'
+import { createRouter, createWebHistory, RouteLocation, RouteLocationNormalized, RouteRecordRaw } from 'vue-router'
 import { useAuth } from '../stores/auth'
+import { storeToRefs } from 'pinia'
 
-async function checkAuth(): Promise<string | void> {
+async function checkAuth(to: RouteLocationNormalized): Promise<string | void> {
   let auth = useAuth()
+  let { redirectTo } = storeToRefs(auth)
   await auth.checkAuth()
   
   if (!auth.user) {
+    redirectTo.value = to.path
     return '/login'
   }
 }
