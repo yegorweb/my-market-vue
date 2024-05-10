@@ -48,7 +48,15 @@ async function logout() {
         </div>
       </div>
   
-      
+      <div class="mt-4 d-flex align-center">
+        <v-avatar size="60" color="green" style="font-size: 26px; font-weight: 700; color: #FFFFFF;">
+          {{ user.name.split(' ').map(item => item[0]).join('') }}
+        </v-avatar>
+
+        <div class="ml-4" style="font-size: 22px; font-weight: 600;">
+          {{ user.name }}
+        </div>
+      </div>
     </v-container>
   </div>
 </template>
