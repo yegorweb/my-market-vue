@@ -4,10 +4,10 @@ import { storeToRefs } from 'pinia'
 
 async function checkAuth(to: RouteLocationNormalized): Promise<string | void> {
   let auth = useAuth()
-  let { redirectTo } = storeToRefs(auth)
+  let { user, redirectTo } = storeToRefs(auth)
   await auth.checkAuth()
   
-  if (!auth.user) {
+  if (!user.value) {
     redirectTo.value = to.path
     return '/login'
   }
@@ -27,6 +27,19 @@ const routes: RouteRecordRaw[] = [
         name: 'Account',
         props: true,
         component: () => import('@/pages/account/AccountPage.vue'),
+      },
+      {
+        path: 'my-page',
+        redirect: to => {
+          let auth = useAuth()
+          let { user, redirectTo } = storeToRefs(auth)
+          
+          if (!user.value) {
+            redirectTo.value = '/my-page'
+            return { path: '/login' }
+          }
+          return { path: `/user/${user.value._id}` }
+        }
       },
       {
         path: 'product/:id',

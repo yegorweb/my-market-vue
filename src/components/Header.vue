@@ -39,7 +39,7 @@ const { x, y } = useScroll(document)
             Создать
           </v-list-item>
 
-          <v-list-item prepend-icon="mdi-account" :ripple="false" :to="user ? `/user/${user._id}` : '/login'">
+          <v-list-item prepend-icon="mdi-account" :ripple="false" to="/my-page">
             Кабинет
           </v-list-item>
         </v-list>
