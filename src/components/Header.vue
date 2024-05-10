@@ -25,7 +25,7 @@ const { x, y } = useScroll(document)
           <span class="mdi mdi-map-marker-outline" style="font-size: 20px;" />&nbsp;Глазов
       </div>
       
-      <v-menu location="bottom right">
+      <v-menu location="bottom end">
         <template v-slot:activator="{ props }">
           <v-app-bar-nav-icon v-bind="props" :ripple="false" variant="plain" />
         </template>
