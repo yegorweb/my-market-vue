@@ -35,11 +35,11 @@ const { x, y } = useScroll(document)
             Главная
           </v-list-item>
 
-          <v-list-item prepend-icon="mdi-plus" to="/create">
+          <v-list-item prepend-icon="mdi-plus" to="/create" :ripple="false">
             Создать
           </v-list-item>
 
-          <v-list-item prepend-icon="mdi-account" :to="user ? `/user/${user._id}` : '/login'">
+          <v-list-item prepend-icon="mdi-account" :ripple="false" :to="user ? `/user/${user._id}` : '/login'">
             Кабинет
           </v-list-item>
         </v-list>
