@@ -25,7 +25,7 @@
     "vue": "^3.3.10",
     "vue-router": "^4.2.5",
     "vue-toastification": "^2.0.0-rc.5",
-    "vuetify": "^3.4.6",
+    "vuetify": "^3.6.4",
     "webfontloader": "^1.6.28",
     "yup": "^1.0.2"
   },
