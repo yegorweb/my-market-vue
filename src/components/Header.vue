@@ -22,7 +22,7 @@ const { x, y } = useScroll(document)
       </div>
   
       <div :class="`d-flex align-center pa-2 cursor-pointer ${useDisplay().smAndUp.value ? 'abs-location' : ''}`">
-          <span class="mdi mdi-map-marker-outline" style="font-size: 18px;" />&nbsp;Глазов
+          <span class="mdi mdi-map-marker-outline" style="font-size: 20px;" />&nbsp;Глазов
       </div>
       
       <v-menu location="bottom right">
