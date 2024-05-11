@@ -64,11 +64,11 @@ function startShare() {
             </v-col>
 
             <v-col class="d-flex flex-column align-start align-lg-end" cols="8" lg="4">
-              <v-btn :ripple="false" prepend-icon="mdi-phone" class="bg-green w-100 rounded-lg text-body-1" variant="tonal">
+              <v-btn :ripple="false" prepend-icon="mdi-phone" class="bg-green w-100 rounded-lg text-body-1" variant="tonal" href="tel:+79999999999">
                 Позвонить
               </v-btn>
 
-              <v-btn :ripple="false" prepend-icon="mdi-send" class="mt-2 w-100 rounded-lg text-body-1" variant="tonal">
+              <v-btn :ripple="false" prepend-icon="mdi-send" class="mt-2 w-100 rounded-lg text-body-1" variant="tonal" href="whatsapp://send?phone=+79999999999">
                 Написать
               </v-btn>
 
@@ -90,4 +90,4 @@ function startShare() {
   border-radius: 12px;
   box-shadow: 0px 10px 40px 5px rgba(34, 60, 80, 0.08);
 }
-</style></style>
+</style>
