@@ -61,7 +61,7 @@ const { x, y } = useScroll(document)
 }
 .logo:hover {
   .logo-img {
-    box-shadow: 0 0 10px rgba($color: #000000, $alpha: 0.08);
+    box-shadow: 0 0 10px rgba($color: #000000, $alpha: 0.07);
   }
 }
 </style>
