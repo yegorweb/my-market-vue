@@ -1,7 +1,18 @@
 <script setup lang="ts">
+import { useShare } from '@vueuse/core';
 import BackButton from '../components/BackButton.vue';
 
 let images = ['https://www.belnovosti.by/sites/default/files/2023-04/kartoshka_2_0_0.jpg', 'https://www.belnovosti.by/sites/default/files/2023-04/kartoshka_2_0_0.jpg']
+
+const { share, isSupported } = useShare()
+
+function startShare() {
+  share({
+    title: 'Картошка',
+    text: 'д. Штанигурт',
+    url: location.href,
+  })
+}
 </script>
 
 <template>
@@ -60,6 +71,10 @@ let images = ['https://www.belnovosti.by/sites/default/files/2023-04/kartoshka_2
               <v-btn :ripple="false" prepend-icon="mdi-send" class="mt-2 w-100 rounded-lg text-body-1" variant="tonal">
                 Написать
               </v-btn>
+
+              <v-btn @click="startShare" v-if="isSupported" :ripple="false" prepend-icon="mdi-share" class="mt-2 w-100 text-body-1" variant="text">
+                Поделиться
+              </v-btn>
             </v-col>
           </v-row>
         </div>
@@ -75,4 +90,4 @@ let images = ['https://www.belnovosti.by/sites/default/files/2023-04/kartoshka_2
   border-radius: 12px;
   box-shadow: 0px 10px 40px 5px rgba(34, 60, 80, 0.08);
 }
-</style>
+</style></style>
