@@ -6,7 +6,9 @@ export interface Product {
   description: string
   author: User
   responses: string[]
-  date: number
-  on_moderation: boolean
-  moderation_result?: boolean
+  address: string
+  location: {
+    type: 'Point'
+    coordinates: [number, number]
+  }
 }
