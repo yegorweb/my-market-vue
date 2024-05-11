@@ -15,8 +15,8 @@ const { x, y } = useScroll(document)
 <template>
   <div :style="`background: ${ y > 0 ? '#FFFFFF' : 'none'}; position: fixed; top: 0; left: 0; right: 0; height: 60px; z-index: 999;`">
     <v-container class="d-flex align-center justify-space-between user-select-none" style="height: 60px; position: relative;">
-      <div @click="router.push('/')" class="d-flex align-center cursor-pointer">
-          <img src="/logo.svg" style="height: 40px;" />
+      <div @click="router.push('/')" class="d-flex align-center cursor-pointer logo">
+          <img src="/logo.svg" style="height: 40px;" class="logo-img" />
   
           <div class="font-weight-bold" style="font-size: 18px; margin-left: 15px;">МойМаркет</div>
       </div>
@@ -54,5 +54,14 @@ const { x, y } = useScroll(document)
   top: 50%; 
   left: 50%; 
   transform: translate(-50%, -50%);
+}
+.logo-img {
+  border-radius: 12px;
+  transition: all .25s;
+}
+.logo:hover {
+  .logo-img {
+    box-shadow: 0 0 10px rgba($color: #000000, $alpha: 0.08);
+  }
 }
 </style>
