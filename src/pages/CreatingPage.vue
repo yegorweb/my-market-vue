@@ -21,6 +21,7 @@ const { meta, handleSubmit, validate } = useForm({
     description: '',
     price: '',
     images: <Array<File>>[],
+    phone: '',
   },
   validationSchema: {
     title(value: string) {
@@ -37,6 +38,9 @@ const { meta, handleSubmit, validate } = useForm({
     },
     price(value: string) {
       return value ? true : 'введите цену'
+    },
+    phone(value: string) {
+      return value ? true : 'введите телефон'
     }
   },
 })
@@ -47,6 +51,7 @@ let title = useField<string>('title')
 let description = useField<string>('description')
 let price = useField<string>('price')
 let location = ref<any>()
+let phone = useField<string>('phone')
 let images = useField<Array<Blob | null>>('images')
 let previews = ref<Array<String>>([])
 let locationSearchRequest = ref<String>('')
@@ -165,6 +170,9 @@ watch(locationSearchRequest, async (value) => {
               </template>
             </v-autocomplete>
 
+            <v-text-field v-model="phone.value.value" :error-messages="phone.errorMessage.value" variant="outlined"
+              placeholder="Телефон" density="compact" class="w-100" />
+
             <Cropper @finishCrop="handleCrop"></Cropper>
             <v-row class="d-flex justify-center">
               <v-col cols="auto">
@@ -173,11 +181,6 @@ watch(locationSearchRequest, async (value) => {
                 </div>
               </v-col>
             </v-row>
-            <div class="mt-4 w-100 d-flex">
-              <v-btn class="text-body-1" variant="tonal" prepend-icon="mdi-plus">
-                Телефон
-              </v-btn>
-            </div>
 
             <v-btn class="ma-auto bg-green-lighten-1 mt-4" variant="tonal" type="submit" :loading="loading"
               :disabled="!meta.valid">
