@@ -1,11 +1,14 @@
-import { createRouter, createWebHistory, RouteLocation, RouteRecordRaw } from 'vue-router'
+import { createRouter, createWebHistory, RouteLocation, RouteLocationNormalized, RouteRecordRaw } from 'vue-router'
 import { useAuth } from '../stores/auth'
+import { storeToRefs } from 'pinia'
 
-async function checkAuth(): Promise<string | void> {
+async function checkAuth(to: RouteLocationNormalized): Promise<string | void> {
   let auth = useAuth()
+  let { user, redirectTo } = storeToRefs(auth)
   await auth.checkAuth()
   
-  if (!auth.user) {
+  if (!user.value) {
+    redirectTo.value = to.path
     return '/login'
   }
 }
@@ -24,6 +27,19 @@ const routes: RouteRecordRaw[] = [
         name: 'Account',
         props: true,
         component: () => import('@/pages/account/AccountPage.vue'),
+      },
+      {
+        path: 'my-page',
+        redirect: to => {
+          let auth = useAuth()
+          let { user, redirectTo } = storeToRefs(auth)
+          
+          if (!user.value) {
+            redirectTo.value = '/my-page'
+            return { path: '/login' }
+          }
+          return { path: `/user/${user.value._id}` }
+        }
       },
       {
         path: 'product/:id',
@@ -59,6 +75,12 @@ const routes: RouteRecordRaw[] = [
 const router = createRouter({
   history: createWebHistory(),
   routes
+})
+
+router.afterEach((to, from) => {
+  const toDepth = to.path.split('/').length
+  const fromDepth = from.path.split('/').length
+  to.meta.transition = toDepth < fromDepth ? 'scale-slide' : 'slide'
 })
 
 export default router

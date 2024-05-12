@@ -1,10 +1,22 @@
 <script setup lang="ts">
+import { useShare } from '@vueuse/core';
 import BackButton from '../components/BackButton.vue';
 
 let images = ['https://www.belnovosti.by/sites/default/files/2023-04/kartoshka_2_0_0.jpg', 'https://www.belnovosti.by/sites/default/files/2023-04/kartoshka_2_0_0.jpg']
+
+const { share, isSupported } = useShare()
+
+function startShare() {
+  share({
+    title: 'Картошка',
+    text: 'д. Штанигурт',
+    url: location.href,
+  })
+}
 </script>
 
 <template>
+  <div class="w-100">
   <v-container>
     <BackButton />
 
@@ -52,12 +64,16 @@ let images = ['https://www.belnovosti.by/sites/default/files/2023-04/kartoshka_2
             </v-col>
 
             <v-col class="d-flex flex-column align-start align-lg-end" cols="8" lg="4">
-              <v-btn class="bg-green w-100 text-body-1" variant="tonal">
+              <v-btn :ripple="false" prepend-icon="mdi-phone" class="bg-green w-100 rounded-lg text-body-1" variant="tonal" href="tel:+79999999999">
                 Позвонить
               </v-btn>
 
-              <v-btn class="mt-2 w-100 text-body-1" variant="outlined">
+              <v-btn :ripple="false" prepend-icon="mdi-send" class="mt-2 w-100 rounded-lg text-body-1" variant="tonal" href="whatsapp://send?phone=+79999999999">
                 Написать
+              </v-btn>
+
+              <v-btn @click="startShare" v-if="isSupported" :ripple="false" prepend-icon="mdi-share" class="mt-2 w-100 text-body-1" variant="text">
+                Поделиться
               </v-btn>
             </v-col>
           </v-row>
@@ -65,6 +81,7 @@ let images = ['https://www.belnovosti.by/sites/default/files/2023-04/kartoshka_2
       </v-col>
     </v-row>
   </v-container>
+  </div>
 </template>
 
 <style lang="scss" scoped>

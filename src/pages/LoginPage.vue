@@ -31,14 +31,17 @@ let loading = ref(false)
 
 const login = handleSubmit(async values => {
   loading.value = true
-  await auth.login(values.email, values.password)
-  loading.value = false
+
+  let result = await auth.login(values.email, values.password)
+  if (result)
+    router.push(result)
   
-  router.push('/')
+  loading.value = false
 })
 </script>
 
 <template>
+  <div class="w-100">
   <v-container class="align-start">
     <BackButton></BackButton>
 
@@ -85,4 +88,5 @@ const login = handleSubmit(async values => {
       </v-card>
     </v-col>
   </v-container>
+  </div>
 </template>

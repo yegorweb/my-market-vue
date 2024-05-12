@@ -14,11 +14,13 @@ let { user } = storeToRefs(auth)
 </script>
 
 <template>
-  <v-container>
-    <v-row>
-      <v-col v-for="item in 10" cols="6" sm="4" md="3">
-        <Product />
-      </v-col>
-    </v-row>
-  </v-container>
+  <div class="w-100">
+    <v-container>
+      <v-row>
+        <v-col v-for="item in 10" cols="6" sm="4" md="3">
+          <Product />
+        </v-col>
+      </v-row>
+    </v-container>
+  </div>
 </template>
