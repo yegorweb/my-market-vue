@@ -106,7 +106,10 @@ function handleCrop(result: CropResult) {
 
 const submit = handleSubmit(async values => {
   loading.value = true
-  values.location = location.value;
+  console.log(location.value.name);
+
+  values.location = { type: 'Point', coordinates: [location.value.geo_lon, location.value.geo_lat] }
+  values.address = location.value.name
   const response = await productStore.create(values)
   const productId = response?.data._id
 
