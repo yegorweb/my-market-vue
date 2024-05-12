@@ -118,11 +118,10 @@ const submit = handleSubmit(async values => {
     for (let i = 0; i < values.images.length; i++) {
       formData.append(`${productId}_${i}`, values.images[i])
     }
-    console.log(formData);
-
     await productStore.uploadImages(formData, productId)
   }
   loading.value = false
+  router.push('/')
 })
 watch(locationSearchRequest, async (value) => {
   possibleLocations.value = await getPossibleLocations(value);
