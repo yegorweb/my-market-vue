@@ -11,7 +11,7 @@ let like = ref(false)
 </script>
 
 <template>
-  <div class="container" @click="router.push('/product/1234')">
+  <div class="container" @click="router.push(`/product/${product._id}`)">
     <div :style="{ background: `url(${product.images[0]}) 50% 50% no-repeat`, backgroundSize: 'cover', aspectRatio: `1.3`, width: `100%` }" />
   
     <div class="pa-4 pt-4" style="position: relative;">
@@ -46,7 +46,7 @@ let like = ref(false)
       </div>
 
       <div class="mt-1" style="font-size: clamp(0.875rem, 0.7188rem + 0.5vw, 1rem);">
-        <span class="mdi mdi-map-marker-outline" style="font-size: 18px;"></span> Штанигурт
+        <span class="mdi mdi-map-marker-outline" style="font-size: 18px;"></span> {{ product.address }}
       </div>
     </div>
   </div>
