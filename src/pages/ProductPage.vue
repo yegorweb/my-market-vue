@@ -1,15 +1,19 @@
 <script setup lang="ts">
 import { useShare } from '@vueuse/core';
 import BackButton from '../components/BackButton.vue';
+import { useProduct } from '../stores/product';
+import { Product } from '../types/product.interface';
 
-let images = ['https://www.belnovosti.by/sites/default/files/2023-04/kartoshka_2_0_0.jpg', 'https://www.belnovosti.by/sites/default/files/2023-04/kartoshka_2_0_0.jpg']
+let props = defineProps(['id'])
+let id = props.id
+let product = await useProduct().getById(id) as Product
 
 const { share, isSupported } = useShare()
 
 function startShare() {
   share({
-    title: 'Картошка',
-    text: 'д. Штанигурт',
+    title: product.title,
+    text: product.address,
     url: location.href,
   })
 }
@@ -24,7 +28,7 @@ function startShare() {
       <v-col cols="12" md="4">
         <v-carousel height="auto" hide-delimiters style="border-radius: 8px">
           <v-carousel-item
-            v-for="src, i in images"
+            v-for="src, i in product.images"
             :key="i"
             height="auto"
             :src="src"
@@ -40,35 +44,31 @@ function startShare() {
                 class="font-weight-bold mr-7" 
                 style="text-overflow: ellipsis; white-space: nowrap; overflow: hidden; max-width: 100%; font-size: 20px;"
               >
-                Картошка
+                {{ product.title }}
               </div>
     
               <div class="mt-1">
-                <p>Своя свежая картошечка</p>
-                <p> </p>
-                <p>Продаю 50 руб за кг</p>
-                <p>д. Штанигурт, ул. Юкаменская, д. 15</p>
-                <p>+7 (922) 500 45-46</p>
+                {{ product.description }}
               </div>
               
               <div 
                 style="font-weight: 600;" 
                 class="mt-2"
               >
-                50 руб/кг
+                {{ product.price }}
               </div>
     
               <div class="mt-1">
-                <span class="mdi mdi-map-marker-outline" style="font-size: 18px;"></span> Штанигурт
+                <span class="mdi mdi-map-marker-outline" style="font-size: 18px;"></span> {{ product.address }}
               </div>
             </v-col>
 
             <v-col class="d-flex flex-column align-start align-lg-end" cols="8" lg="4">
-              <v-btn :ripple="false" prepend-icon="mdi-phone" class="bg-green w-100 rounded-lg text-body-1" variant="tonal" href="tel:+79999999999">
+              <v-btn :ripple="false" prepend-icon="mdi-phone" class="bg-green w-100 rounded-lg text-body-1" variant="tonal" :href="`tel:${product.phone}`">
                 Позвонить
               </v-btn>
 
-              <v-btn :ripple="false" prepend-icon="mdi-send" class="mt-2 w-100 rounded-lg text-body-1" variant="tonal" href="whatsapp://send?phone=+79999999999">
+              <v-btn :ripple="false" prepend-icon="mdi-send" class="mt-2 w-100 rounded-lg text-body-1" variant="tonal" :href="`whatsapp://send?phone=${product.phone}`">
                 Написать
               </v-btn>
 
