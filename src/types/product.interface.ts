@@ -6,7 +6,9 @@ export interface Product {
   description: string
   author: User
   responses: string[]
-  address: string
+  address: string,
+  images: string[],
+  price: string,
   location: {
     type: 'Point'
     coordinates: [number, number]

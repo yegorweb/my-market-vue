@@ -1,11 +1,15 @@
 import { defineStore } from "pinia";
 import ProductAPI from "../api/ProductAPI";
 import { Product } from "../types/product.interface";
+import { ref } from "vue";
 
 export const useProduct = defineStore('product', () => {
-  async function get(query: object): Promise<Product[]> {
+  let products = ref([])
+  let filter = ref()
+
+  async function get(): Promise<Product[]> {
     try {
-      return (await ProductAPI.get(query)).data
+      return (await ProductAPI.get(filter.value)).data
     } catch {
       return []
     }
@@ -45,5 +49,5 @@ export const useProduct = defineStore('product', () => {
     } catch {}
   }
 
-  return { get, getById, getByAuthor, getMyProducts, create, deleteProduct }
+  return { products, filter, get, getById, getByAuthor, getMyProducts, create, deleteProduct }
 })

@@ -4,7 +4,8 @@ import { useRouter } from 'vue-router';
 import { useDisplay } from 'vuetify/lib/framework.mjs';
 import { useAuth } from '../stores/auth';
 import { useScroll } from '@vueuse/core'
-import { ref, watch } from 'vue';
+import { computed, ref, watch } from 'vue';
+import { useProduct } from '../stores/product';
 
 let auth = useAuth()
 let { user } = storeToRefs(auth)
@@ -21,6 +22,15 @@ let location = ref(localStorage.getItem('location') ? JSON.parse(localStorage.ge
   shortName: "Глазов",
   type: "Point"
 })
+let radius = ref(localStorage.getItem('radius') ? Number(localStorage.getItem('radius')) : 10)
+
+let { filter } = storeToRefs(useProduct())
+watch([radius, location], ([rad, loc]) => {
+  localStorage.setItem('radius', rad.toString())
+  filter.value = { radius: rad, geo_lon: loc.coordinates[0], geo_lat: loc.coordinates[1] } 
+  useProduct().get()
+})
+
 let possibleLocations = ref<any>([])
 
 watch(locationQuery, async (value, oldValue) => {
