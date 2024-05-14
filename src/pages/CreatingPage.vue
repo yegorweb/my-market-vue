@@ -54,9 +54,9 @@ let location = ref<any>()
 let phone = useField<string>('phone')
 let images = useField<Array<Blob | null>>('images')
 let previews = ref<Array<String>>([])
-let locationSearchRequest = ref<String>('')
+let locationSearchRequest = ref<string>('')
 
-async function getPossibleLocations(value: String) {
+async function getPossibleLocations(value: string) {
   if (value.trim().length < 3)
     return
 
@@ -78,7 +78,7 @@ async function getPossibleLocations(value: String) {
     })
   }
 
-  let res = await fetch(url, options)
+  let res = await fetch(url, options as any)
 
   try {
     let suggestions = JSON.parse(await res.text()).suggestions
@@ -109,7 +109,7 @@ function handleCrop(result: CropResult) {
   previews.value.push(result.base64)
 }
 
-const submit = handleSubmit(async values => {
+const submit = handleSubmit(async (values: any) => {
   loading.value = true
   console.log(location.value.name);
 
