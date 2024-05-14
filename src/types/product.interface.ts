@@ -12,5 +12,6 @@ export interface Product {
   location: {
     type: 'Point'
     coordinates: [number, number]
-  }
+  },
+  phone: string
 }
