@@ -4,12 +4,76 @@ import { useRouter } from 'vue-router';
 import { useDisplay } from 'vuetify/lib/framework.mjs';
 import { useAuth } from '../stores/auth';
 import { useScroll } from '@vueuse/core'
+import { ref, watch } from 'vue';
 
 let auth = useAuth()
 let { user } = storeToRefs(auth)
 
 let router = useRouter()
 const { x, y } = useScroll(document)
+
+let showAddPlace = ref(false)
+let url = "https://suggestions.dadata.ru/suggestions/api/4_1/rs/suggest/address";
+let locationQuery = ref('')
+let location = ref(localStorage.getItem('location') ? JSON.parse(localStorage.getItem('location') as any) : {
+  coordinates: [52.663446, 58.135907],
+  name: "Удмуртская Респ, г Глазов",
+  shortName: "Глазов",
+  type: "Point"
+})
+let possibleLocations = ref<any>([])
+
+watch(locationQuery, async (value, oldValue) => {
+  if (value.trim().length > 2 && value.length > oldValue.length) {
+    let options = {
+      method: "POST",
+      mode: "cors",
+      headers: {
+        "Content-Type": "application/json",
+        "Accept": "application/json",
+        "Authorization": "Token " + import.meta.env.VITE_DADATA_TOKEN
+      },
+      body: JSON.stringify({
+        query: value,
+        count: 5,
+        "from_bound": { "value": "city" },
+        "to_bound": { "value": "settlement" }
+      })
+    }
+    
+    let res = await fetch(url, options as any)
+    try {
+      let suggestions = JSON.parse(await res.text()).suggestions
+      possibleLocations.value = []
+      for (let s of suggestions) {
+        let location = {
+          name: s.value,
+          shortName: '',
+          type: 'Point',
+          coordinates: [
+            s.data.geo_lon,
+            s.data.geo_lat
+          ]
+        }
+
+        if (s.data.settlement) {
+          location.shortName = s.data.settlement
+        }
+        else if (s.data.city) {
+          location.shortName = s.data.city
+        } else {
+          location.shortName = s.value
+        }
+
+        possibleLocations.value.push(location)
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  }
+})
+
+watch(possibleLocations, value => console.log(value))
 </script>
 
 <template>
@@ -45,6 +109,26 @@ const { x, y } = useScroll(document)
         </v-list>
       </v-menu>
     </v-container>
+
+    <v-menu v-model="showAddPlace" :close-on-content-click="false" activator="parent" scroll-strategy="close" transition="scroll-y-transition">
+      <v-row class="justify-center">
+        <v-col cols="12" sm="8" md="6" lg="4" class="pa-0">
+          <v-card class="pa-6 rounded-lg">
+            <v-autocomplete 
+              v-model="location" 
+              v-model:search="locationQuery" 
+              :items="possibleLocations" 
+              item-title="name" 
+              label="Место" 
+              density="compact"
+              variant="outlined"
+              clearable 
+              hide-details
+            />
+          </v-card>
+        </v-col>
+      </v-row>
+    </v-menu>
   </div>
 </template>
 
