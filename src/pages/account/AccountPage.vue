@@ -7,6 +7,7 @@ import { useUser } from '../../stores/user';
 import { User } from '../../types/user.interface';
 import { storeToRefs } from 'pinia';
 import Product from '../../components/Product.vue';
+import { useProduct } from '../../stores/product';
 
 let router = useRouter()
 let auth = useAuth()
@@ -18,6 +19,7 @@ let id = props.id
 let { user:viewer } = storeToRefs(auth)
 let my_page = viewer.value?._id === id
 let user = ref(viewer.value && viewer.value._id === id ? viewer.value : await userStore.getById(id) as User)
+let products = await useProduct().getByAuthor(user.value._id)
 
 document.title = `${user.value.name} — Мой Маркет`
 
@@ -60,8 +62,8 @@ async function logout() {
       </div>
 
       <v-row class="mt-4">
-        <v-col v-for="item in 10" cols="6" sm="4" md="3">
-          <Product />
+        <v-col v-for="item in products" cols="6" sm="4" md="3">
+          <Product :product="item" />
         </v-col>
       </v-row>
     </v-container>
