@@ -183,7 +183,7 @@ watch(locationSearchRequest, async (value) => {
             </v-row>
 
             <v-btn class="ma-auto bg-green-lighten-1 mt-4" variant="tonal" type="submit" :loading="loading"
-              :disabled="!meta.valid">
+              :disabled="!meta.valid || !previews.length">
               Отправить
             </v-btn>
           </v-form>
