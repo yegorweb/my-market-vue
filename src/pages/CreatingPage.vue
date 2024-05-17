@@ -25,14 +25,14 @@ const { meta, handleSubmit, validate } = useForm({
   },
   validationSchema: {
     title(value: string) {
-      if (value.trim().length < 4) return 'слишком короткий заголовок'
-      if (value.length > 32) return 'слишком длинный заголовок'
+      if (value && value.trim().length < 4) return 'слишком короткий заголовок'
+      if (value && value.length > 32) return 'слишком длинный заголовок'
 
       return true
     },
     description(value: string) {
-      if (value.trim().length < 20) return 'слишком короткое описание'
-      if (value.length > 150) return 'слишком длинное описание'
+      if (value && value.trim().length < 20) return 'слишком короткое описание'
+      if (value && value.length > 150) return 'слишком длинное описание'
 
       return true
     },
