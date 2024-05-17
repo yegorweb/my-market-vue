@@ -5,7 +5,18 @@ import { ref } from "vue";
 
 export const useProduct = defineStore('product', () => {
   let products = ref([])
-  let filter = ref()
+  let location = ref(localStorage.getItem('location') ? JSON.parse(localStorage.getItem('location') as any) : {
+    coordinates: [52.663446, 58.135907],
+    name: "Удмуртская Респ, г Глазов",
+    shortName: "Глазов",
+    type: "Point"
+  })
+  let radius = ref(localStorage.getItem('radius') ? localStorage.getItem('radius') : '1000')
+  let filter = ref({
+    radius: radius.value, 
+    geo_lon: location.value.coordinates[0], 
+    geo_lat: location.value.coordinates[1]
+  })
 
   async function create(data: any) {
     try {
@@ -56,5 +67,5 @@ export const useProduct = defineStore('product', () => {
     } catch { }
   }
 
-  return { products, filter, get, getById, getByAuthor, getMyProducts, create, deleteProduct, uploadImages }
+  return { products, location, radius, filter, get, getById, getByAuthor, getMyProducts, create, deleteProduct, uploadImages }
 })

@@ -2,36 +2,23 @@
 import { storeToRefs } from 'pinia';
 import { useRouter } from 'vue-router';
 import { useDisplay } from 'vuetify/lib/framework.mjs';
-import { useAuth } from '../stores/auth';
 import { useScroll } from '@vueuse/core'
 import { computed, ref, watch } from 'vue';
 import { useProduct } from '../stores/product';
 
-let auth = useAuth()
-let { user } = storeToRefs(auth)
-
 let router = useRouter()
 const { x, y } = useScroll(document)
-
 let showAddPlace = ref(false)
-let url = "https://suggestions.dadata.ru/suggestions/api/4_1/rs/suggest/address";
-let locationQuery = ref('')
-let location = ref(localStorage.getItem('location') ? JSON.parse(localStorage.getItem('location') as any) : {
-  coordinates: [52.663446, 58.135907],
-  name: "Удмуртская Респ, г Глазов",
-  shortName: "Глазов",
-  type: "Point"
-})
-let radius = ref(localStorage.getItem('radius') ? Number(localStorage.getItem('radius')) : 10)
 
-let { filter } = storeToRefs(useProduct())
+let locationQuery = ref('')
+let possibleLocations = ref<any>([])
+
+let { location, filter, radius } = storeToRefs(useProduct())
 watch([radius, location], ([rad, loc]) => {
-  localStorage.setItem('radius', rad.toString())
+  localStorage.setItem('radius', rad as string)
   filter.value = { radius: rad, geo_lon: loc.coordinates[0], geo_lat: loc.coordinates[1] } 
   useProduct().get()
-})
-
-let possibleLocations = ref<any>([])
+}, { deep: true })
 
 watch(locationQuery, async (value, oldValue) => {
   if (value.trim().length > 2 && value.length > oldValue.length) {
@@ -51,7 +38,7 @@ watch(locationQuery, async (value, oldValue) => {
       })
     }
     
-    let res = await fetch(url, options as any)
+    let res = await fetch("https://suggestions.dadata.ru/suggestions/api/4_1/rs/suggest/address", options as any)
     try {
       let suggestions = JSON.parse(await res.text()).suggestions
       possibleLocations.value = []
@@ -133,8 +120,15 @@ watch(possibleLocations, value => console.log(value))
               density="compact"
               variant="outlined"
               clearable 
-              hide-details
             />
+
+            <v-text-field
+              v-model="radius"
+              variant="outlined"
+              placeholder="Радиус"
+              density="compact"
+              hide-details
+            ></v-text-field>
           </v-card>
         </v-col>
       </v-row>
