@@ -33,9 +33,9 @@ export const useProduct = defineStore('product', () => {
 
   async function get(): Promise<Product[]> {
     try {
-      return (await ProductAPI.get(filter.value)).data
+      return products.value = (await ProductAPI.get(filter.value)).data
     } catch {
-      return []
+      return products.value = []
     }
   }
 
