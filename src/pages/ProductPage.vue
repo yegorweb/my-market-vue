@@ -26,7 +26,7 @@ function startShare() {
 
     <v-row class="mt-1">
       <v-col cols="12" md="4">
-        <v-carousel height="auto" hide-delimiters style="border-radius: 8px">
+        <v-carousel height="auto" :show-arrows="product.images.length > 1 ? 'hover' : false" hide-delimiters style="border-radius: 8px">
           <v-carousel-item
             v-for="src, i in product.images"
             :key="i"
