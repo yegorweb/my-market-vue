@@ -47,7 +47,8 @@ const login = handleSubmit(async values => {
 
     <v-col cols="12" xs="12" md="6" lg="4" class="mt-4 ma-auto">
       <v-card 
-        class="d-flex flex-column justify-center align-center text-center rounded-lg w-100 pl-6 pr-6 pt-4 pb-6"
+        style="border-radius: 12px; box-shadow: 0 0 12px rgba(0, 0, 0, 0.12);"
+        class="d-flex flex-column justify-center align-center text-center w-100 pl-6 pr-6 pt-4 pb-6"
       >
         <div class="text-h6 font-weight-bold">Вход</div>
   
@@ -55,6 +56,7 @@ const login = handleSubmit(async values => {
           <v-text-field 
             label="Email"
             type="email"
+            id="email"
             placeholder="vasya@ya.ru"
             v-model="email.value.value"
             :error-messages="email.errorMessage.value"
@@ -65,6 +67,7 @@ const login = handleSubmit(async values => {
 
           <v-text-field 
             label="Пароль"
+            id="password"
             v-model="password.value.value"
             :append-inner-icon="show_password ? 'mdi-eye' : 'mdi-eye-off'"
             @click:append-inner="show_password = !show_password"

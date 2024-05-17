@@ -77,10 +77,11 @@ const submit = handleSubmit(async values => {
       class="mt-4 ma-auto"
     >
       <v-card 
+        style="border-radius: 12px; box-shadow: 0 0 12px rgba(0, 0, 0, 0.12);"
         class="d-flex flex-column 
         justify-center align-center 
         text-center w-100 pl-6 pr-6 
-        pt-4 pb-6 rounded-lg"
+        pt-4 pb-6"
       >
         <div 
           class="text-h6 font-weight-bold"
