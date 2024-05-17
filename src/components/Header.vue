@@ -15,62 +15,60 @@ let possibleLocations = ref<any>([])
 
 let { location, filter, radius } = storeToRefs(useProduct())
 watch([radius, location], ([rad, loc]) => {
+  if (!loc || !rad) return
   localStorage.setItem('radius', rad as string)
-  filter.value = { radius: rad, geo_lon: loc.coordinates[0], geo_lat: loc.coordinates[1] } 
+  filter.value = { radius: rad, geo_lon: loc.geo_lon, geo_lat: loc.geo_lat } 
   useProduct().get()
 }, { deep: true })
 
 watch(locationQuery, async (value, oldValue) => {
-  if (value.trim().length > 2 && value.length > oldValue.length) {
-    let options = {
-      method: "POST",
-      mode: "cors",
-      headers: {
-        "Content-Type": "application/json",
-        "Accept": "application/json",
-        "Authorization": "Token " + import.meta.env.VITE_DADATA_TOKEN
-      },
-      body: JSON.stringify({
-        query: value,
-        count: 5,
-        "from_bound": { "value": "city" },
-        "to_bound": { "value": "settlement" }
-      })
-    }
-    
-    let res = await fetch("https://suggestions.dadata.ru/suggestions/api/4_1/rs/suggest/address", options as any)
-    try {
-      let suggestions = JSON.parse(await res.text()).suggestions
-      possibleLocations.value = []
-      for (let s of suggestions) {
-        let location = {
-          name: s.value,
-          shortName: '',
-          type: 'Point',
-          coordinates: [
-            s.data.geo_lon,
-            s.data.geo_lat
-          ]
-        }
+  if (value.trim().length < 3)
+    return
 
-        if (s.data.settlement) {
-          location.shortName = s.data.settlement
-        }
-        else if (s.data.city) {
-          location.shortName = s.data.city
-        } else {
-          location.shortName = s.value
-        }
+  let url = "https://suggestions.dadata.ru/suggestions/api/4_1/rs/suggest/address";
 
-        possibleLocations.value.push(location)
+  let options = {
+    method: "POST",
+    mode: "cors",
+    headers: {
+      "Content-Type": "application/json",
+      "Accept": "application/json",
+      "Authorization": `Token ${import.meta.env.VITE_DADATA_TOKEN}`
+    },
+    body: JSON.stringify({
+      query: value,
+      count: 10,
+      "from_bound": { "value": "city" },
+      "to_bound": { "value": "house" }
+    })
+  }
+
+  let res = await fetch(url, options as any)
+
+  try {
+    let suggestions = JSON.parse(await res.text()).suggestions
+    //         city_with_type : "г Глазов"
+    //         region_with_type: "Удмуртская Респ"
+    possibleLocations.value = suggestions.map(s => ({
+      name: s.value,
+
+      // dont remove name duplication 
+      geo: {
+        name: s.value,
+        geo_lat: s.data.geo_lat,
+        geo_lon: s.data.geo_lon,
+        city_with_type: s.data.city_with_type,
+        settlement_with_type: s.data.settlement_with_type,
+        region_with_type: s.data.region_with_type,
+        area_with_type: s.data.area_with_type,
+        capital_marker: s.data.capital_marker
       }
-    } catch (error) {
-      console.log(error);
-    }
+
+    }))
+  } catch (error) {
+    console.log(error);
   }
 })
-
-watch(possibleLocations, value => console.log(value))
 </script>
 
 <template>
@@ -82,9 +80,44 @@ watch(possibleLocations, value => console.log(value))
           <div class="font-weight-bold" style="font-size: 18px; margin-left: 15px;">МойМаркет</div>
       </div>
   
-      <div :class="`d-flex align-center pa-2 cursor-pointer ${useDisplay().smAndUp.value ? 'abs-location' : ''}`">
-          <span class="mdi mdi-map-marker-outline" style="font-size: 20px;" />&nbsp;Глазов
-      </div>
+      <v-menu :close-on-content-click="false" location="bottom center" scroll-strategy="close" transition="scroll-y-transition">
+        <template v-slot:activator="{ props }">
+            <div v-bind="props" :class="`d-flex align-center pa-2 cursor-pointer ${useDisplay().smAndUp.value ? 'abs-location' : ''}`">
+              <span class="mdi mdi-map-marker-outline" style="font-size: 20px;" />&nbsp;{{ location ? location.name.split(' ').pop() : 'Укажите' }}
+            </div>
+        </template>
+
+        <v-card class="mt-2 pa-6 rounded-lg" :style="{ width: useDisplay().smAndUp.value ? '450px' : '350px' }">
+          <v-autocomplete 
+            hide-details 
+            density="compact" 
+            v-model="location" 
+            v-model:search="locationQuery"
+            auto-select-first
+            :items="possibleLocations" 
+            item-title="name" 
+            placeholder="Место" 
+            item-value="geo" 
+            variant="outlined"
+            clearable 
+            class="w-100 mb-4"
+          >
+            <template v-slot:no-data>
+              <div class="pt-2 pr-4 pb-2 pl-4">
+                {{ locationQuery.trim().length < 3 ? "Минимум 3 символа" : "Не найдено" }} 
+              </div>
+            </template>
+          </v-autocomplete>
+
+          <v-text-field
+            v-model="radius"
+            variant="outlined"
+            label="Радиус"
+            density="compact"
+            hide-details
+          ></v-text-field>
+        </v-card>
+      </v-menu>
       
       <v-menu location="bottom end">
         <template v-slot:activator="{ props }">
@@ -106,33 +139,6 @@ watch(possibleLocations, value => console.log(value))
         </v-list>
       </v-menu>
     </v-container>
-
-    <v-menu v-model="showAddPlace" :close-on-content-click="false" activator="parent" scroll-strategy="close" transition="scroll-y-transition">
-      <v-row class="justify-center">
-        <v-col cols="12" sm="8" md="6" lg="4" class="pa-0">
-          <v-card class="pa-6 rounded-lg">
-            <v-autocomplete 
-              v-model="location" 
-              v-model:search="locationQuery" 
-              :items="possibleLocations" 
-              item-title="name" 
-              label="Место" 
-              density="compact"
-              variant="outlined"
-              clearable 
-            />
-
-            <v-text-field
-              v-model="radius"
-              variant="outlined"
-              placeholder="Радиус"
-              density="compact"
-              hide-details
-            ></v-text-field>
-          </v-card>
-        </v-col>
-      </v-row>
-    </v-menu>
   </div>
 </template>
 
