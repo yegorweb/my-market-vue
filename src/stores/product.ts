@@ -17,6 +17,7 @@ export const useProduct = defineStore('product', () => {
     geo_lon: location.value.coordinates[0], 
     geo_lat: location.value.coordinates[1]
   })
+  let loading = ref(true)
 
   async function create(data: any) {
     try {
@@ -31,12 +32,14 @@ export const useProduct = defineStore('product', () => {
     } catch (error) { console.log(error); }
   }
 
-  async function get(): Promise<Product[]> {
+  async function get(): Promise<void> {
+    loading.value = true
     try {
-      return products.value = (await ProductAPI.get(filter.value)).data
+      products.value = (await ProductAPI.get(filter.value)).data
     } catch {
-      return products.value = []
+      products.value = []
     }
+    loading.value = false
   }
 
   async function getById(_id: string): Promise<Product | undefined> {
@@ -67,5 +70,5 @@ export const useProduct = defineStore('product', () => {
     } catch { }
   }
 
-  return { products, location, radius, filter, get, getById, getByAuthor, getMyProducts, create, deleteProduct, uploadImages }
+  return { products, location, radius, filter, loading, get, getById, getByAuthor, getMyProducts, create, deleteProduct, uploadImages }
 })
