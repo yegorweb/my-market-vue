@@ -160,7 +160,7 @@ watch(locationSearchRequest, async (value) => {
             density="compact"
             class="w-100"
           /> -->
-            <v-autocomplete hide-details density="compact" v-model="location" v-model:search="locationSearchRequest"
+            <v-autocomplete hide-details auto-select-first density="compact" v-model="location" v-model:search="locationSearchRequest"
               :items="possibleLocations" item-title="name" placeholder="Место" item-value="geo" variant="outlined"
               clearable class="w-100 mb-4">
               <template v-slot:no-data>
