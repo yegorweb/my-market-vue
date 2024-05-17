@@ -1,16 +1,10 @@
 <script setup lang="ts">
 import { storeToRefs } from "pinia";
-import { useRouter } from "vue-router"
-import { useAuth } from '../stores/auth'
 import Product from "../components/Product.vue";
 import { useProduct } from "../stores/product";
  
 document.title = 'Мой Маркет'
 
-let router = useRouter()
-
-let auth = useAuth()
-let { user } = storeToRefs(auth)
 let { products } = storeToRefs(useProduct())
 useProduct().get()
 </script>
