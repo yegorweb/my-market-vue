@@ -174,10 +174,11 @@ watch(locationSearchRequest, async (value) => {
               placeholder="Телефон" density="compact" class="w-100" />
 
             <Cropper @finishCrop="handleCrop"></Cropper>
-            <v-row class="d-flex justify-center">
-              <v-col cols="auto">
-                <div v-for="p in previews" class="preview">
-                  <img :src="p.toString()" alt="preview" />
+
+            <v-row class="d-flex justify-center mt-2 flex-wrap">
+              <v-col v-for="p in previews" cols="4">
+                <div class="preview">
+                  <img :src="p.toString()" alt="preview" style="border-radius: 4px;" />
                 </div>
               </v-col>
             </v-row>
@@ -196,7 +197,7 @@ watch(locationSearchRequest, async (value) => {
 <style lang="scss" scoped>
 .preview {
   img {
-    height: 150px;
+    width: 100%;
   }
 }
 </style>
