@@ -16,6 +16,7 @@ let possibleLocations = ref<any>([])
 let { location, filter, radius } = storeToRefs(useProduct())
 watch([radius, location], ([rad, loc]) => {
   if (!loc || !rad) return
+  localStorage.setItem('location', JSON.stringify(loc))
   localStorage.setItem('radius', rad as string)
   filter.value = { radius: rad, geo_lon: loc.geo_lon, geo_lat: loc.geo_lat } 
   useProduct().get()

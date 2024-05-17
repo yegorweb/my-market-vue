@@ -6,7 +6,8 @@ import { ref } from "vue";
 export const useProduct = defineStore('product', () => {
   let products = ref([])
   let location = ref(localStorage.getItem('location') ? JSON.parse(localStorage.getItem('location') as any) : {
-    coordinates: [52.663446, 58.135907],
+    geo_lon: '52.663446', 
+    geo_lat: '58.135907',
     name: "Удмуртская Респ, г Глазов",
     shortName: "Глазов",
     type: "Point"
